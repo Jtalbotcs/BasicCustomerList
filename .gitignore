@@ -1,0 +1,15 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Maven
+target/
+log/
+*.log
+
+#Mongo
+db/
+ 
+# Mac
+.DS_Store
