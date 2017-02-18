@@ -1,33 +1,33 @@
-package com.talbot.customerList.model;
+package com.talbot.customerList.core.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="customers")
 public class Customer {
 	@Id
-	private String id;
+	private Long id;
 	private String firstname;
 	private String lastname;
 	private String email;
 	private String telephone;
 //	private Address address;
 	public Customer() {}
-	public Customer(String firstName, String lastName, String email, String telephone) {
-		this.firstname = firstName;
-		this.lastname = lastName;
+	public Customer(String firstname, String lastname, String email, String telephone) {
+		this.firstname = firstname;
+		this.lastname = lastname;
 		this.email = email;
 		this.telephone = telephone;
 	}
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	/**
@@ -39,8 +39,8 @@ public class Customer {
 	/**
 	 * @param firstName the firstName to set
 	 */
-	public void setFirstName(String firstName) {
-		this.firstname = firstName;
+	public void setFirstName(String firstname) {
+		this.firstname = firstname;
 	}
 	/**
 	 * @return the lastName
@@ -51,8 +51,8 @@ public class Customer {
 	/**
 	 * @param lastName the lastName to set
 	 */
-	public void setLastName(String lastName) {
-		this.lastname = lastName;
+	public void setLastName(String lastname) {
+		this.lastname = lastname;
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class Customer {
     @Override
     public String toString() {
         return String.format(
-                "Customer[id=%s, firstName='%s', lastName='%s', email='%s', telephone='%s']",
+                "Customer[id=%s, firstname='%s', lastname='%s', email='%s', telephone='%s']",
                 id, firstname, lastname, email, telephone);
     }
 }

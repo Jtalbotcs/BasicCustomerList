@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.talbot.customerList.model.Customer;
+import com.talbot.customerList.core.entities.Customer;
 
 public interface CustomersRepository extends MongoRepository<Customer, String>{
 	
