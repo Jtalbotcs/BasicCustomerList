@@ -2,19 +2,19 @@ package com.talbot.customerList.core.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-@Document(collection="customers")
+@Document(collection="customer")
 public class Customer {
 	@Id
 	private Long id;
-	private String firstname;
-	private String lastname;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String telephone;
 //	private Address address;
 	public Customer() {}
-	public Customer(String firstname, String lastname, String email, String telephone) {
-		this.firstname = firstname;
-		this.lastname = lastname;
+	public Customer(String firstName, String lastName, String email, String telephone) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
 		this.telephone = telephone;
 	}
@@ -34,25 +34,25 @@ public class Customer {
 	 * @return the firstName
 	 */
 	public String getFirstName() {
-		return firstname;
+		return firstName;
 	}
 	/**
 	 * @param firstName the firstName to set
 	 */
-	public void setFirstName(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 	/**
 	 * @return the lastName
 	 */
 	public String getLastName() {
-		return lastname;
+		return lastName;
 	}
 	/**
 	 * @param lastName the lastName to set
 	 */
-	public void setLastName(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	/**
@@ -91,10 +91,10 @@ public class Customer {
 //	public void setAddress(Address address) {
 //		this.address = address;
 //	}
-    @Override
+/*    @Override
     public String toString() {
         return String.format(
                 "Customer[id=%s, firstname='%s', lastname='%s', email='%s', telephone='%s']",
-                id, firstname, lastname, email, telephone);
-    }
+                id, firstName, lastName, email, telephone);
+    }*/
 }

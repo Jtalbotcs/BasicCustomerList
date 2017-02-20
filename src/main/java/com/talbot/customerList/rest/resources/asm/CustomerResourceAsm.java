@@ -20,8 +20,8 @@ public class CustomerResourceAsm extends ResourceAssemblerSupport<Customer, Cust
 	public CustomerResource toResource(Customer customer) {
 		CustomerResource res = new CustomerResource();
 		res.setEmail(customer.getEmail());
-		res.setFirstname(customer.getFirstName());
-		res.setLastname(customer.getLastName());
+		res.setFirstName(customer.getFirstName());
+		res.setLastName(customer.getLastName());
 		res.setTelephone(customer.getTelephone());
 		Link link = linkTo(CustomerController.class).slash(customer.getId()).withSelfRel();
 		res.add(link);

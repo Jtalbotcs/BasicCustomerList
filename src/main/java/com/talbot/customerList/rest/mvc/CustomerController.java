@@ -9,11 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.talbot.customerList.core.entities.Customer;
+import com.talbot.customerList.core.services.exceptions.CustomerNotFoundException;
 import com.talbot.customerList.core.services.CustomerService;
+import com.talbot.customerList.core.services.util.CustomerList;
+import com.talbot.customerList.rest.exceptions.NotFoundException;
+import com.talbot.customerList.rest.resources.CustomerListResource;
 import com.talbot.customerList.rest.resources.CustomerResource;
+import com.talbot.customerList.rest.resources.asm.CustomerListResourceAsm;
 import com.talbot.customerList.rest.resources.asm.CustomerResourceAsm;
 @Controller
-@RequestMapping("/rest/customers")
+@RequestMapping("/rest/customer")
 public class CustomerController {
 	private CustomerService service;
 	
@@ -21,22 +26,30 @@ public class CustomerController {
 		this.service = service;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<CustomerListResource> getAllCustomers()
+	{
+        CustomerList customerList = service.findAllCustomers();
+        CustomerListResource customerListResource = new CustomerListResourceAsm().toResource(customerList);
+        return new ResponseEntity<CustomerListResource>(customerListResource, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/{customerId}", method = RequestMethod.GET)
 	public ResponseEntity<CustomerResource> getCustomer(
 			@PathVariable Long customerId)
 	{
-		Customer customer = service.find(customerId);
-		if (customer != null) {
+		try{
+			Customer customer = service.findCustomer(customerId);
 			CustomerResource res = new CustomerResourceAsm().toResource(customer);
 			return new ResponseEntity<CustomerResource>(res, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<CustomerResource>(HttpStatus.NOT_FOUND);
+		} catch(CustomerNotFoundException e){
+			throw new NotFoundException(e);
 		}
 	}
 	@RequestMapping(value="/{customerId}", method = RequestMethod.DELETE)
 	public ResponseEntity<CustomerResource> deleteCustomer(
 			@PathVariable Long customerId) {
-		Customer entry = service.delete(customerId);
+		Customer entry = service.deleteCustomer(customerId);
 		if(entry != null)
 		{
 			CustomerResource res = new CustomerResourceAsm().toResource(entry);
@@ -49,7 +62,7 @@ public class CustomerController {
 	@RequestMapping(value="/{customerId}", method = RequestMethod.PUT)
 	public ResponseEntity<CustomerResource> updateCustomer(
 			@PathVariable Long customerId, @RequestBody CustomerResource sentCustomer) {
-		Customer updatedEntry = service.update(customerId, sentCustomer.toCustomer());
+		Customer updatedEntry = service.updateCustomer(customerId, sentCustomer.toCustomer());
 		if(updatedEntry != null)
 		{
 			CustomerResource res = new CustomerResourceAsm().toResource(updatedEntry);
