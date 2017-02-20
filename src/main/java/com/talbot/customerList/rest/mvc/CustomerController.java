@@ -17,6 +17,8 @@ import com.talbot.customerList.rest.resources.CustomerListResource;
 import com.talbot.customerList.rest.resources.CustomerResource;
 import com.talbot.customerList.rest.resources.asm.CustomerListResourceAsm;
 import com.talbot.customerList.rest.resources.asm.CustomerResourceAsm;
+
+import org.slf4j.*;
 @Controller
 @RequestMapping("/rest/customer")
 public class CustomerController {
@@ -35,13 +37,50 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value="/{customerId}", method = RequestMethod.GET)
-	public ResponseEntity<CustomerResource> getCustomer(
+	public ResponseEntity<CustomerResource> getCustomerById(
 			@PathVariable Long customerId)
 	{
 		try{
-			Customer customer = service.findCustomer(customerId);
+			Customer customer = service.findById(customerId);
 			CustomerResource res = new CustomerResourceAsm().toResource(customer);
 			return new ResponseEntity<CustomerResource>(res, HttpStatus.OK);
+		} catch(CustomerNotFoundException e){
+			throw new NotFoundException(e);
+		}
+	}
+	@RequestMapping(value="/email/{email}", method = RequestMethod.GET)
+	public ResponseEntity<CustomerResource> getCustomerByEmail(
+			@PathVariable String email)
+	{
+		email = email.replace("_", "@").replace("-", ".");
+		try{
+			Customer customer = service.findByEmail(email);
+			CustomerResource res = new CustomerResourceAsm().toResource(customer);
+			return new ResponseEntity<CustomerResource>(res, HttpStatus.OK);
+		} catch(CustomerNotFoundException e){
+			throw new NotFoundException(e);
+		}
+	}
+	@RequestMapping(value="/firstName/{firstName}", method = RequestMethod.GET)
+	public ResponseEntity<CustomerListResource> getCustomerByFirstName(
+			@PathVariable String firstName)
+	{
+		try{
+			CustomerList customers = service.findByFirstName(firstName);
+			CustomerListResource res = new CustomerListResourceAsm().toResource(customers);
+			return new ResponseEntity<CustomerListResource>(res, HttpStatus.OK);
+		} catch(CustomerNotFoundException e){
+			throw new NotFoundException(e);
+		}
+	}
+	@RequestMapping(value="/lastName/{lastName}", method = RequestMethod.GET)
+	public ResponseEntity<CustomerListResource> getCustomerByLastName(
+			@PathVariable String lastName)
+	{
+		try{
+			CustomerList customers = service.findByLastName(lastName);
+			CustomerListResource res = new CustomerListResourceAsm().toResource(customers);
+			return new ResponseEntity<CustomerListResource>(res, HttpStatus.OK);
 		} catch(CustomerNotFoundException e){
 			throw new NotFoundException(e);
 		}

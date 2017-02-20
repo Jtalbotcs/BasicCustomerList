@@ -45,7 +45,7 @@ public class CustomerControllerTest {
 	
     @Test
     public void findAllBlogs() throws Exception {
-        List<Customer> list = new ArrayList<Customer>();
+        List<Customer> customers = new ArrayList<Customer>();
 
         Customer customerA = new Customer();
         customerA.setId(1L);
@@ -53,7 +53,7 @@ public class CustomerControllerTest {
         customerA.setLastName("Ross");
 		customerA.setEmail("fwef@gmail.com");
 		customerA.setTelephone("4014354833");
-        list.add(customerA);
+        customers.add(customerA);
         
         Customer customerB = new Customer();
         customerB.setId(1L);
@@ -61,21 +61,21 @@ public class CustomerControllerTest {
         customerB.setLastName("Fisher");
         customerB.setEmail("sfisher@gmail.com");
         customerB.setTelephone("4014452343");
-        list.add(customerB);
+        customers.add(customerB);
 
         CustomerList allCustomers = new CustomerList();
-        allCustomers.setCustomers(list);
+        allCustomers.setCustomers(customers);
 
         when(service.findAllCustomers()).thenReturn(allCustomers);
 
-        mockMvc.perform(get("/rest/customer")).andDo(print())
+        mockMvc.perform(get("/rest/customer"))
                 .andExpect(jsonPath("$.customers[*].email",
                         hasItems(endsWith("fwef@gmail.com"), endsWith("sfisher@gmail.com"))))
                 .andExpect(status().isOk());
     }
 
 	@Test
-	public void getExistingCustomer() throws Exception{
+	public void getExistingCustomerById() throws Exception{
 		Customer customer = new Customer();
 		customer.setId(1L);
 		customer.setFirstName("Bob");
@@ -83,7 +83,7 @@ public class CustomerControllerTest {
 		customer.setEmail("fwef@gmail.com");
 		customer.setTelephone("4014354833");
 		
-		when(service.findCustomer(1L)).thenReturn(customer);
+		when(service.findById(1L)).thenReturn(customer);
 		
         mockMvc.perform(get("/rest/customer/1"))
         .andExpect(jsonPath("$.firstName", is(customer.getFirstName())))
@@ -95,8 +95,87 @@ public class CustomerControllerTest {
 	}
 	
 	@Test
+	public void getExistingCustomerByEmail() throws Exception{
+		Customer customer = new Customer();
+		customer.setId(1L);
+		customer.setFirstName("Bob");
+		customer.setLastName("Ross");
+		customer.setEmail("fwef@gmail.com");
+		customer.setTelephone("4014354833");
+		
+		when(service.findByEmail("fwef@gmail.com")).thenReturn(customer);
+		
+        mockMvc.perform(get("/rest/customer/email/fwef_gmail-com")).andDo(print())
+        .andExpect(jsonPath("$.firstName", is(customer.getFirstName())))
+        .andExpect(jsonPath("$.lastName", is(customer.getLastName())))
+        .andExpect(jsonPath("$.email", is(customer.getEmail())))
+        .andExpect(jsonPath("$.telephone", is(customer.getTelephone())))
+        .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/1"))))
+        .andExpect(status().isOk());
+	}
+	@Test
+	public void getExistingCustomerByFirstName() throws Exception{
+		List<Customer> customers = new ArrayList<Customer>();
+		Customer customerA = new Customer();
+		customerA.setId(1L);
+		customerA.setFirstName("Bob");
+		customerA.setLastName("Ross");
+		customerA.setEmail("fwef@gmail.com");
+		customerA.setTelephone("4014354833");
+		customers.add(customerA);
+        
+		Customer customerB = new Customer();
+		customerB.setId(1L);
+		customerB.setFirstName("Bob");
+		customerB.setLastName("Moss");
+		customerB.setEmail("BMoss@gmail.com");
+		customerB.setTelephone("4014564844");
+		customers.add(customerB);
+		
+		CustomerList customerList = new CustomerList();
+		customerList.setCustomers(customers);
+		
+		when(service.findByFirstName("Bob")).thenReturn(customerList);
+		
+        mockMvc.perform(get("/rest/customer/firstName/Bob"))
+        .andExpect(jsonPath("$.customers[*].email",
+                hasItems(endsWith("fwef@gmail.com"), endsWith("BMoss@gmail.com"))))
+        .andExpect(status().isOk());
+	}
+	
+	@Test
+	public void getExistingCustomerByLastName() throws Exception{
+		List<Customer> customers = new ArrayList<Customer>();
+		Customer customerA = new Customer();
+		customerA.setId(1L);
+		customerA.setFirstName("Bob");
+		customerA.setLastName("Ross");
+		customerA.setEmail("fwef@gmail.com");
+		customerA.setTelephone("4014354833");
+		customers.add(customerA);
+        
+		Customer customerB = new Customer();
+		customerB.setId(1L);
+		customerB.setFirstName("Sam");
+		customerB.setLastName("Ross");
+		customerB.setEmail("SRoss@gmail.com");
+		customerB.setTelephone("4014564844");
+		customers.add(customerB);
+		
+		CustomerList customerList = new CustomerList();
+		customerList.setCustomers(customers);
+		
+		when(service.findByLastName("Ross")).thenReturn(customerList);
+		
+        mockMvc.perform(get("/rest/customer/lastName/Ross")).andDo(print())
+        .andExpect(jsonPath("$.customers[*].email",
+                hasItems(endsWith("fwef@gmail.com"), endsWith("SRoss@gmail.com"))))
+        .andExpect(status().isOk());
+	}
+	
+	@Test
 	public void getNonExistingCustomer() throws Exception{
-		when(service.findCustomer(1L)).thenThrow(new CustomerNotFoundException("Can not find customer with id \"1L\""));
+		when(service.findById(1L)).thenThrow(new CustomerNotFoundException("Can not find customer with id \"1L\""));
 		
         mockMvc.perform(get("/rest/customer/1"))
         .andExpect(status().isNotFound());
