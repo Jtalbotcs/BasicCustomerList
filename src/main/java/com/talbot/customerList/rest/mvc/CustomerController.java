@@ -18,7 +18,6 @@ import com.talbot.customerList.rest.resources.CustomerResource;
 import com.talbot.customerList.rest.resources.asm.CustomerListResourceAsm;
 import com.talbot.customerList.rest.resources.asm.CustomerResourceAsm;
 
-import org.slf4j.*;
 @Controller
 @RequestMapping("/rest/customer")
 public class CustomerController {

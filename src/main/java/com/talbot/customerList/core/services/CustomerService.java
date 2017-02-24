@@ -1,6 +1,5 @@
 package com.talbot.customerList.core.services;
 
-import java.util.List;
 
 import com.talbot.customerList.core.entities.Customer;
 import com.talbot.customerList.core.services.util.CustomerList;

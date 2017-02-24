@@ -1,4 +1,4 @@
-package com.talbot.customerList.repositories;
+package com.talbot.customerList.core.repositories;
 
 
 import org.springframework.data.mongodb.repository.MongoRepository;

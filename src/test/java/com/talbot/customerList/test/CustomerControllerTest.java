@@ -105,7 +105,7 @@ public class CustomerControllerTest {
 		
 		when(service.findByEmail("fwef@gmail.com")).thenReturn(customer);
 		
-        mockMvc.perform(get("/rest/customer/email/fwef_gmail-com")).andDo(print())
+        mockMvc.perform(get("/rest/customer/email/fwef_gmail-com"))
         .andExpect(jsonPath("$.firstName", is(customer.getFirstName())))
         .andExpect(jsonPath("$.lastName", is(customer.getLastName())))
         .andExpect(jsonPath("$.email", is(customer.getEmail())))
@@ -167,7 +167,7 @@ public class CustomerControllerTest {
 		
 		when(service.findByLastName("Ross")).thenReturn(customerList);
 		
-        mockMvc.perform(get("/rest/customer/lastName/Ross")).andDo(print())
+        mockMvc.perform(get("/rest/customer/lastName/Ross"))
         .andExpect(jsonPath("$.customers[*].email",
                 hasItems(endsWith("fwef@gmail.com"), endsWith("SRoss@gmail.com"))))
         .andExpect(status().isOk());
