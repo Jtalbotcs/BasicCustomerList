@@ -9,7 +9,7 @@ public interface CustomerService {
 	 * @param id the id of the Customer to find
 	 * @return the Customer or null if the Customer is not found
 	 */
-	public Customer findById(Long id);
+	public Customer findById(String id);
 	
 	/**
 	 * @return all Customers in the database
@@ -19,19 +19,19 @@ public interface CustomerService {
 	 * @param id the id of the Customer to delete
 	 * @return the deleted Customer or null if not found
 	 */
-	public Customer deleteCustomer(Long id);
+	public Customer deleteCustomer(String id);
 	/**
 	 * @param id the id of the Customer to update
 	 * @param data the up to date customer data
 	 * @return the updated Customer or null if not found
 	 */
-	public Customer updateCustomer(Long id, Customer data);
+	public Customer updateCustomer(String id, Customer data);
 	/**
 	 * @param id the id of the customer to be added
 	 * @param data the customer data to add to the database
 	 * @return the new customer with a generated id
 	 */
-	public Customer addCustomer(Long id, Customer data);
+	public Customer addCustomer(String id, Customer data);
 	/**
 	 * @param firstName the firstName attribute of the customer to find
 	 * @return a list of matching customers

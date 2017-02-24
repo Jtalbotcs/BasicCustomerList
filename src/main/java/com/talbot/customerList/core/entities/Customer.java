@@ -1,18 +1,20 @@
 package com.talbot.customerList.core.entities;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="customer")
 public class Customer {
 	@Id
-	private Long id;
+	private String id;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String telephone;
 //	private Address address;
-	public Customer() {}
+	public Customer() {this.id = new ObjectId().toString();}
 	public Customer(String firstName, String lastName, String email, String telephone) {
+		this.id = new ObjectId().toString();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -21,13 +23,13 @@ public class Customer {
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	/**

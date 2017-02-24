@@ -48,7 +48,6 @@ public class CustomerControllerTest {
         List<Customer> customers = new ArrayList<Customer>();
 
         Customer customerA = new Customer();
-        customerA.setId(1L);
         customerA.setFirstName("Bob");
         customerA.setLastName("Ross");
 		customerA.setEmail("fwef@gmail.com");
@@ -56,7 +55,6 @@ public class CustomerControllerTest {
         customers.add(customerA);
         
         Customer customerB = new Customer();
-        customerB.setId(1L);
         customerB.setFirstName("Sam");
         customerB.setLastName("Fisher");
         customerB.setEmail("sfisher@gmail.com");
@@ -77,27 +75,27 @@ public class CustomerControllerTest {
 	@Test
 	public void getExistingCustomerById() throws Exception{
 		Customer customer = new Customer();
-		customer.setId(1L);
+		String id = customer.getId();
 		customer.setFirstName("Bob");
 		customer.setLastName("Ross");
 		customer.setEmail("fwef@gmail.com");
 		customer.setTelephone("4014354833");
 		
-		when(service.findById(1L)).thenReturn(customer);
+		when(service.findById(id)).thenReturn(customer);
 		
-        mockMvc.perform(get("/rest/customer/1"))
+        mockMvc.perform(get("/rest/customer/" + id))
         .andExpect(jsonPath("$.firstName", is(customer.getFirstName())))
         .andExpect(jsonPath("$.lastName", is(customer.getLastName())))
         .andExpect(jsonPath("$.email", is(customer.getEmail())))
         .andExpect(jsonPath("$.telephone", is(customer.getTelephone())))
-        .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/1"))))
+        .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/"+ id))))
         .andExpect(status().isOk());
 	}
 	
 	@Test
 	public void getExistingCustomerByEmail() throws Exception{
 		Customer customer = new Customer();
-		customer.setId(1L);
+		String id = customer.getId();
 		customer.setFirstName("Bob");
 		customer.setLastName("Ross");
 		customer.setEmail("fwef@gmail.com");
@@ -110,14 +108,13 @@ public class CustomerControllerTest {
         .andExpect(jsonPath("$.lastName", is(customer.getLastName())))
         .andExpect(jsonPath("$.email", is(customer.getEmail())))
         .andExpect(jsonPath("$.telephone", is(customer.getTelephone())))
-        .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/1"))))
+        .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/" + id))))
         .andExpect(status().isOk());
 	}
 	@Test
 	public void getExistingCustomerByFirstName() throws Exception{
 		List<Customer> customers = new ArrayList<Customer>();
 		Customer customerA = new Customer();
-		customerA.setId(1L);
 		customerA.setFirstName("Bob");
 		customerA.setLastName("Ross");
 		customerA.setEmail("fwef@gmail.com");
@@ -125,7 +122,6 @@ public class CustomerControllerTest {
 		customers.add(customerA);
         
 		Customer customerB = new Customer();
-		customerB.setId(1L);
 		customerB.setFirstName("Bob");
 		customerB.setLastName("Moss");
 		customerB.setEmail("BMoss@gmail.com");
@@ -147,7 +143,6 @@ public class CustomerControllerTest {
 	public void getExistingCustomerByLastName() throws Exception{
 		List<Customer> customers = new ArrayList<Customer>();
 		Customer customerA = new Customer();
-		customerA.setId(1L);
 		customerA.setFirstName("Bob");
 		customerA.setLastName("Ross");
 		customerA.setEmail("fwef@gmail.com");
@@ -155,7 +150,6 @@ public class CustomerControllerTest {
 		customers.add(customerA);
         
 		Customer customerB = new Customer();
-		customerB.setId(1L);
 		customerB.setFirstName("Sam");
 		customerB.setLastName("Ross");
 		customerB.setEmail("SRoss@gmail.com");
@@ -175,66 +169,66 @@ public class CustomerControllerTest {
 	
 	@Test
 	public void getNonExistingCustomer() throws Exception{
-		when(service.findById(1L)).thenThrow(new CustomerNotFoundException("Can not find customer with id \"1L\""));
+		when(service.findById("badid")).thenThrow(new CustomerNotFoundException("Can not find customer with id \"badid\""));
 		
-        mockMvc.perform(get("/rest/customer/1"))
+        mockMvc.perform(get("/rest/customer/badid"))
         .andExpect(status().isNotFound());
 	}
 	
     @Test
     public void deleteExistingCustomer() throws Exception {
         Customer deletedCustomer = new Customer();
-        deletedCustomer.setId(1L);
+		String id = deletedCustomer.getId();
         deletedCustomer.setFirstName("Bob");
         deletedCustomer.setLastName("Ross");
         deletedCustomer.setEmail("fwef@gmail.com");
         deletedCustomer.setTelephone("4014354833");
 
-        when(service.deleteCustomer(1L)).thenReturn(deletedCustomer);
+        when(service.deleteCustomer(id)).thenReturn(deletedCustomer);
 
-        mockMvc.perform(delete("/rest/customer/1"))
+        mockMvc.perform(delete("/rest/customer/" + id))
         	.andExpect(jsonPath("$.firstName", is(deletedCustomer.getFirstName())))
         	.andExpect(jsonPath("$.lastName", is(deletedCustomer.getLastName())))
         	.andExpect(jsonPath("$.email", is(deletedCustomer.getEmail())))
         	.andExpect(jsonPath("$.telephone", is(deletedCustomer.getTelephone())))
-        	.andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/1"))))
+        	.andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/" + id))))
         	.andExpect(status().isOk());
     }
 
     @Test
     public void deleteNonExistingCustomer() throws Exception {
-        when(service.deleteCustomer(1L)).thenReturn(null);
+        when(service.deleteCustomer("badid")).thenReturn(null);
 
-        mockMvc.perform(delete("/rest/customer/1"))
+        mockMvc.perform(delete("/rest/customer/badid"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void updateExistingCustomer() throws Exception {
         Customer updatedEntry = new Customer();
-        updatedEntry.setId(1L);
+		String id = updatedEntry.getId();
         updatedEntry.setFirstName("Bob");
         updatedEntry.setLastName("Ross");
         updatedEntry.setEmail("fwef@gmail.com");
         updatedEntry.setTelephone("4014354833");
 
-        when(service.updateCustomer(eq(1L), any(Customer.class)))
+        when(service.updateCustomer(eq("badid"), any(Customer.class)))
                 .thenReturn(updatedEntry);
 
-        mockMvc.perform(put("/rest/customer/1")
+        mockMvc.perform(put("/rest/customer/badid")
                 .content(testJSONCustomer)
                 .contentType(MediaType.APPLICATION_JSON))
     			.andExpect(jsonPath("$.firstName", is(updatedEntry.getFirstName())))
     			.andExpect(jsonPath("$.lastName", is(updatedEntry.getLastName())))
     			.andExpect(jsonPath("$.email", is(updatedEntry.getEmail())))
     			.andExpect(jsonPath("$.telephone", is(updatedEntry.getTelephone())))
-    			.andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/1"))))
+    			.andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/" + id))))
     			.andExpect(status().isOk());
     }
 
     @Test
     public void updateNonExistingCustomer() throws Exception {
-        when(service.updateCustomer(eq(1L), any(Customer.class)))
+        when(service.updateCustomer(eq("1"), any(Customer.class)))
                 .thenReturn(null);
 
         mockMvc.perform(put("/rest/customer/1")

@@ -37,7 +37,7 @@ public class CustomerController {
 	
 	@RequestMapping(value="/{customerId}", method = RequestMethod.GET)
 	public ResponseEntity<CustomerResource> getCustomerById(
-			@PathVariable Long customerId)
+			@PathVariable String customerId)
 	{
 		try{
 			Customer customer = service.findById(customerId);
@@ -86,7 +86,7 @@ public class CustomerController {
 	}
 	@RequestMapping(value="/{customerId}", method = RequestMethod.DELETE)
 	public ResponseEntity<CustomerResource> deleteCustomer(
-			@PathVariable Long customerId) {
+			@PathVariable String customerId) {
 		Customer entry = service.deleteCustomer(customerId);
 		if(entry != null)
 		{
@@ -99,7 +99,7 @@ public class CustomerController {
 
 	@RequestMapping(value="/{customerId}", method = RequestMethod.PUT)
 	public ResponseEntity<CustomerResource> updateCustomer(
-			@PathVariable Long customerId, @RequestBody CustomerResource sentCustomer) {
+			@PathVariable String customerId, @RequestBody CustomerResource sentCustomer) {
 		Customer updatedEntry = service.updateCustomer(customerId, sentCustomer.toCustomer());
 		if(updatedEntry != null)
 		{
