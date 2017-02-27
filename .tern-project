@@ -1,0 +1,35 @@
+{
+  "ecmaVersion": 5,
+  "plugins": {
+    "guess-types": {
+      
+    },
+    "outline": {
+      
+    },
+    "node": {
+      
+    },
+    "jshint": {
+      "config": {
+        "maxerr": 50
+      }
+    },
+    "jasmine": {
+      
+    },
+    "angular1": {
+      
+    },
+    "grunt": {
+      
+    },
+    "bootstrap": {
+      
+    }
+  },
+  "libs": [
+    "browser",
+    "jquery"
+  ]
+}

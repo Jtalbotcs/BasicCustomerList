@@ -10,7 +10,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.talbot.customerList.core.entities.Customer;
+import com.talbot.customerList.core.services.exceptions.CustomerEmailExistsException;
 import com.talbot.customerList.core.services.exceptions.CustomerNotFoundException;
+import com.talbot.customerList.core.services.exceptions.CustomerTelephoneExistsException;
 import com.talbot.customerList.core.services.CustomerService;
 import com.talbot.customerList.core.services.util.CustomerList;
 import com.talbot.customerList.rest.mvc.CustomerController;
@@ -44,7 +46,7 @@ public class CustomerControllerTest {
 	}
 	
     @Test
-    public void findAllBlogs() throws Exception {
+    public void findAllCustomers() throws Exception {
         List<Customer> customers = new ArrayList<Customer>();
 
         Customer customerA = new Customer();
@@ -93,81 +95,6 @@ public class CustomerControllerTest {
 	}
 	
 	@Test
-	public void getExistingCustomerByEmail() throws Exception{
-		Customer customer = new Customer();
-		String id = customer.getId();
-		customer.setFirstName("Bob");
-		customer.setLastName("Ross");
-		customer.setEmail("fwef@gmail.com");
-		customer.setTelephone("4014354833");
-		
-		when(service.findByEmail("fwef@gmail.com")).thenReturn(customer);
-		
-        mockMvc.perform(get("/rest/customer/email/fwef_gmail-com"))
-        .andExpect(jsonPath("$.firstName", is(customer.getFirstName())))
-        .andExpect(jsonPath("$.lastName", is(customer.getLastName())))
-        .andExpect(jsonPath("$.email", is(customer.getEmail())))
-        .andExpect(jsonPath("$.telephone", is(customer.getTelephone())))
-        .andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/" + id))))
-        .andExpect(status().isOk());
-	}
-	@Test
-	public void getExistingCustomerByFirstName() throws Exception{
-		List<Customer> customers = new ArrayList<Customer>();
-		Customer customerA = new Customer();
-		customerA.setFirstName("Bob");
-		customerA.setLastName("Ross");
-		customerA.setEmail("fwef@gmail.com");
-		customerA.setTelephone("4014354833");
-		customers.add(customerA);
-        
-		Customer customerB = new Customer();
-		customerB.setFirstName("Bob");
-		customerB.setLastName("Moss");
-		customerB.setEmail("BMoss@gmail.com");
-		customerB.setTelephone("4014564844");
-		customers.add(customerB);
-		
-		CustomerList customerList = new CustomerList();
-		customerList.setCustomers(customers);
-		
-		when(service.findByFirstName("Bob")).thenReturn(customerList);
-		
-        mockMvc.perform(get("/rest/customer/firstName/Bob"))
-        .andExpect(jsonPath("$.customers[*].email",
-                hasItems(endsWith("fwef@gmail.com"), endsWith("BMoss@gmail.com"))))
-        .andExpect(status().isOk());
-	}
-	
-	@Test
-	public void getExistingCustomerByLastName() throws Exception{
-		List<Customer> customers = new ArrayList<Customer>();
-		Customer customerA = new Customer();
-		customerA.setFirstName("Bob");
-		customerA.setLastName("Ross");
-		customerA.setEmail("fwef@gmail.com");
-		customerA.setTelephone("4014354833");
-		customers.add(customerA);
-        
-		Customer customerB = new Customer();
-		customerB.setFirstName("Sam");
-		customerB.setLastName("Ross");
-		customerB.setEmail("SRoss@gmail.com");
-		customerB.setTelephone("4014564844");
-		customers.add(customerB);
-		
-		CustomerList customerList = new CustomerList();
-		customerList.setCustomers(customers);
-		
-		when(service.findByLastName("Ross")).thenReturn(customerList);
-		
-        mockMvc.perform(get("/rest/customer/lastName/Ross"))
-        .andExpect(jsonPath("$.customers[*].email",
-                hasItems(endsWith("fwef@gmail.com"), endsWith("SRoss@gmail.com"))))
-        .andExpect(status().isOk());
-	}
-	
-	@Test
 	public void getNonExistingCustomer() throws Exception{
 		when(service.findById("badid")).thenThrow(new CustomerNotFoundException("Can not find customer with id \"badid\""));
 		
@@ -212,10 +139,10 @@ public class CustomerControllerTest {
         updatedEntry.setEmail("fwef@gmail.com");
         updatedEntry.setTelephone("4014354833");
 
-        when(service.updateCustomer(eq("badid"), any(Customer.class)))
+        when(service.updateCustomer(eq(id), any(Customer.class)))
                 .thenReturn(updatedEntry);
 
-        mockMvc.perform(put("/rest/customer/badid")
+        mockMvc.perform(put("/rest/customer/" + id)
                 .content(testJSONCustomer)
                 .contentType(MediaType.APPLICATION_JSON))
     			.andExpect(jsonPath("$.firstName", is(updatedEntry.getFirstName())))
@@ -228,13 +155,56 @@ public class CustomerControllerTest {
 
     @Test
     public void updateNonExistingCustomer() throws Exception {
-        when(service.updateCustomer(eq("1"), any(Customer.class)))
+        when(service.updateCustomer(eq("badid"), any(Customer.class)))
                 .thenReturn(null);
 
-        mockMvc.perform(put("/rest/customer/1")
+        mockMvc.perform(put("/rest/customer/badid")
                 .content(testJSONCustomer)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void addCustomerNoConflics() throws Exception {
+        Customer customer = new Customer();
+        String id = customer.getId();
+        customer.setFirstName("Bob");
+        customer.setLastName("Ross");
+		customer.setEmail("fwef@gmail.com");
+		customer.setTelephone("4014354833");
+		
+		when(service.addCustomer(any(Customer.class)))
+			.thenReturn(customer);
+		
+		mockMvc.perform(post("/rest/customer/")
+				.content(testJSONCustomer)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.firstName", is(customer.getFirstName())))
+				.andExpect(jsonPath("$.lastName", is(customer.getLastName())))
+				.andExpect(jsonPath("$.email", is(customer.getEmail())))
+				.andExpect(jsonPath("$.telephone", is(customer.getTelephone())))
+				.andExpect(jsonPath("$.links[*].href", hasItem(endsWith("/customer/" + id))))
+				.andExpect(status().isCreated());
+    }
+    @Test
+    public void addCustomerEmailExists() throws Exception {
+    	when(service.addCustomer(any(Customer.class)))
+			.thenThrow(new CustomerEmailExistsException());
+		
+		mockMvc.perform(post("/rest/customer/")
+				.content(testJSONCustomer)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isConflict());
+    }
+    @Test
+    public void addCustomerTelephoneExists() throws Exception {
+    	when(service.addCustomer(any(Customer.class)))
+			.thenThrow(new CustomerTelephoneExistsException());
+		
+		mockMvc.perform(post("/rest/customer/")
+				.content(testJSONCustomer)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isConflict());
     }
 }
 

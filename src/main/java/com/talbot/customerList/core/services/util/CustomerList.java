@@ -9,6 +9,12 @@ import java.util.List;
 public class CustomerList {
 
     private List<Customer> customers = new ArrayList<Customer>();
+    
+    public CustomerList(){}
+    public CustomerList(List<Customer> customers)
+    {
+    	this.customers = customers;
+    }
 
     public List<Customer> getCustomers() {
         return customers;

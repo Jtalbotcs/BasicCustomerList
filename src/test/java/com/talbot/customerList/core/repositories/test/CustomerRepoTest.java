@@ -12,18 +12,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.talbot.customerList.core.entities.Customer;
-import com.talbot.customerList.core.repositories.CustomerRepository;
+import com.talbot.customerList.core.repositories.CustomerRepo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:mongodb-config.xml")
-public class CustomerRepositoryTest {
+public class CustomerRepoTest {
 	
 	@Autowired
-	CustomerRepository customerRepository;
+	CustomerRepo customerRepo;
 	
 	@Before
 	public void init(){
-		customerRepository.deleteAll();
+		customerRepo.deleteAll();
 		Customer customerA = new Customer();
 		customerA.setFirstName("Bob");
 		customerA.setLastName("Ross");
@@ -36,13 +36,13 @@ public class CustomerRepositoryTest {
 		customerB.setEmail("sfisher@gmail.com");
 		customerB.setTelephone("4014452343");
 
-		customerRepository.save(customerA);
-		customerRepository.save(customerB);
+		customerRepo.save(customerA);
+		customerRepo.save(customerB);
 	}
 	@Test
-	public void findAll()
+	public void findAllCustomers()
 	{
-		List<Customer> customers = customerRepository.findAll();
+		List<Customer> customers = customerRepo.findAll();
 		assertEquals(2, customers.size());
 	}
 }

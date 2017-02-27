@@ -27,29 +27,12 @@ public interface CustomerService {
 	 */
 	public Customer updateCustomer(String id, Customer data);
 	/**
-	 * @param id the id of the customer to be added
 	 * @param data the customer data to add to the database
 	 * @return the new customer with a generated id
 	 */
-	public Customer addCustomer(String id, Customer data);
+	public Customer addCustomer(Customer data);
 	/**
 	 * @param firstName the firstName attribute of the customer to find
 	 * @return a list of matching customers
 	 */
-	public CustomerList findByFirstName(String firstName);
-	/**
-	 * @param lastName the lastName attribute of the customer to find
-	 * @return a list of matching customers
-	 */
-	public CustomerList findByLastName(String lastName);
-	/**
-	 * @param email the email attribute of the customer to find
-	 * @return a list of matching customers
-	 */
-	public Customer findByEmail(String email);
-	/**
-	 * @param telephone the telephone attribute of the customer to find
-	 * @return the matching customers
-	 */
-	public CustomerList findByTelephone(String telephone);
 }

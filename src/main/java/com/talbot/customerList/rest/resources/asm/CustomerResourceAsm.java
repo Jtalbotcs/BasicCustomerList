@@ -13,7 +13,6 @@ public class CustomerResourceAsm extends ResourceAssemblerSupport<Customer, Cust
 
 	public CustomerResourceAsm() {
 		super(CustomerController.class, CustomerResource.class);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

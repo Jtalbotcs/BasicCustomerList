@@ -24,4 +24,5 @@
 		<constructor-arg name="databaseName" value="test" />
 	</bean>
 	<mongo:repositories base-package="com.talbot.customerList.core.repositories" />
+	<context:component-scan base-package="com.talbot.customerList.core.services.impl" />
 </beans>
