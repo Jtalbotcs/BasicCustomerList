@@ -73,16 +73,20 @@ public class CustomerController {
 	@RequestMapping(value="/{customerId}", method = RequestMethod.PUT)
 	public ResponseEntity<CustomerResource> updateCustomer(
 			@PathVariable String customerId, @RequestBody CustomerResource customerRes) {
-		Customer updatedEntry = service.updateCustomer(customerId, customerRes.toCustomer());
-		if(updatedEntry != null)
-		{
-			CustomerResource res = new CustomerResourceAsm().toResource(updatedEntry);
-			return new ResponseEntity<CustomerResource>(res, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<CustomerResource>(HttpStatus.NOT_FOUND);
+		try {
+			Customer updatedEntry = service.updateCustomer(customerId, customerRes.toCustomer());
+			if(updatedEntry != null)
+			{
+				CustomerResource res = new CustomerResourceAsm().toResource(updatedEntry);
+				return new ResponseEntity<CustomerResource>(res, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<CustomerResource>(HttpStatus.NOT_FOUND);
+			}
+		} catch(CustomerEmailExistsException | CustomerTelephoneExistsException exception) {
+			throw new ConflictException(exception);
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<CustomerResource> addCustomer(
 			@RequestBody CustomerResource customerRes)

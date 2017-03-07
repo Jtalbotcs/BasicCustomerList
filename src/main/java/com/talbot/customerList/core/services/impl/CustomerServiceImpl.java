@@ -1,5 +1,7 @@
 package com.talbot.customerList.core.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer findById(String id) {
-		return customerRepo.findOne(id);
+		Customer customer = customerRepo.findOne(id);
+		if (customer == null)
+		{
+			throw new CustomerNotFoundException();
+		}
+		return customer;
 	}
 
 	@Override
@@ -46,6 +53,16 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new CustomerNotFoundException();
 		}
 		data.setId(id);
+        Customer customerSameEmail = customerRepo.findCustomerByEmail(data.getEmail());
+        if(customerSameEmail != null && !id.equals(customerSameEmail.getId()))
+        {
+        	throw new CustomerEmailExistsException();
+        }
+        Customer customerSameTelephone = customerRepo.findCustomerByTelephone(data.getTelephone());
+        if(customerSameTelephone != null && !id.equals(customerSameTelephone.getId()))
+        {
+        	throw new CustomerTelephoneExistsException();
+        }
 		return customerRepo.save(data);
 	}
 
@@ -56,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
         {
             throw new CustomerEmailExistsException();
         }
-        customer = customerRepo.findCustomerByEmail(data.getTelephone());
+        customer = customerRepo.findCustomerByTelephone(data.getTelephone());
         if(customer != null)
         {
         	throw new CustomerTelephoneExistsException();

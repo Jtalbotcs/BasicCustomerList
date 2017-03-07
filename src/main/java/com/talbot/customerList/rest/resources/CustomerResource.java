@@ -2,6 +2,7 @@ package com.talbot.customerList.rest.resources;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import com.talbot.customerList.core.entities.Address;
 import com.talbot.customerList.core.entities.Customer;
 
 public class CustomerResource extends ResourceSupport {
@@ -9,6 +10,7 @@ public class CustomerResource extends ResourceSupport {
 	private String lastName;
 	private String email;
 	private String telephone;
+	private Address address;
 
 
 	public String getFirstName() {
@@ -43,13 +45,20 @@ public class CustomerResource extends ResourceSupport {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-	
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	public Address getAddress() {
+		return address;
+	}
     public Customer toCustomer() {
         Customer customer = new Customer();
         customer.setFirstName(firstName);
         customer.setLastName(lastName);
         customer.setEmail(email);
         customer.setTelephone(telephone);
+        customer.setAddress(address);
         return customer;
     }
 }

@@ -11,15 +11,17 @@ public class Customer {
 	private String lastName;
 	private String email;
 	private String telephone;
-//	private Address address;
+	private Address address;
 	public Customer() {this.id = new ObjectId().toString();}
-	public Customer(String firstName, String lastName, String email, String telephone) {
-		this.id = new ObjectId().toString();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.telephone = telephone;
-	}
+
+	// public Customer(String firstName, String lastName, String email, String
+	// telephone) {
+	// this.id = new ObjectId().toString();
+	// this.firstName = firstName;
+	// this.lastName = lastName;
+	// this.email = email;
+	// this.telephone = telephone;
+	// }
 	/**
 	 * @return the id
 	 */
@@ -81,22 +83,16 @@ public class Customer {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-//	/**
-//	 * @return the address
-//	 */
-//	public Address getAddress() {
-//		return address;
-//	}
-//	/**
-//	 * @param address the address to set
-//	 */
-//	public void setAddress(Address address) {
-//		this.address = address;
-//	}
-/*    @Override
-    public String toString() {
-        return String.format(
-                "Customer[id=%s, firstname='%s', lastname='%s', email='%s', telephone='%s']",
-                id, firstName, lastName, email, telephone);
-    }*/
+	/**
+	 * @return the address
+	 */
+	public Address getAddress() {
+		return address;
+	}
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 }
