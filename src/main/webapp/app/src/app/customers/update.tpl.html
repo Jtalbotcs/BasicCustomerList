@@ -1,0 +1,35 @@
+<div class="center-block">
+<div class="col-md-6 col-md-offset-3">
+    <div class="form-area">  
+        <form ng-submit="update()">
+        <br style="clear:both">
+                    <h3 style="margin-bottom: 25px; text-align: center;">Update {{customer.firstName}} {{customer.lastName}}</h3>
+    				<div class="form-group">
+						<input type="text" class="form-control" ng-value="customer.firstName" ng-model="customer.firstName" placeholder="First Name" required>
+					</div>
+    				<div class="form-group">
+						<input type="text" class="form-control" ng-value="customer.lastName" ng-model="customer.lastName" placeholder="Last Name" required>
+					</div>
+					<div class="form-group">
+						<input type="email" class="form-control" ng-value="customer.email" ng-model="customer.email" placeholder="Email" required>
+					</div>
+					<div class="form-group">
+						<input type="tel" class="form-control" ng-value="customer.telephone" ng-model="customer.telephone" placeholder="Phone Number" required>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" ng-value="customer.address.street" ng-model="customer.address.street" placeholder="Street" required>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" ng-value="customer.address.city" ng-model="customer.address.city" placeholder="City" required>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" ng-value="customer.address.state" ng-model="customer.address.state" placeholder="State" required>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" ng-value="customer.address.zip" ng-model="customer.address.zip" placeholder="zip" required>
+					</div>
+        <button type="submit" class="btn btn-primary pull-right">Submit Form</button>
+        </form>
+    </div>
+</div>
+</div>

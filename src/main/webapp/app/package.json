@@ -1,0 +1,38 @@
+{
+  "author": "Josh David Miller",
+  "name": "ngbp",
+  "version": "0.3.2",
+  "homepage": "https://github.com/ngbp/ngbp",
+  "licenses": {
+    "type": "MIT",
+    "url": "https://raw.github.com/ngbp/ngbp/master/LICENSE"
+  },
+  "bugs": "https://github.com/ngbp/ngbp/issues",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ngbp/ngbp.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "1.0.1",
+    "grunt-bump": "0.8.0",
+    "grunt-coffeelint": "0.0.16",
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-contrib-coffee": "1.0.0",
+    "grunt-contrib-concat": "1.0.1",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-jshint": "1.1.0",
+    "grunt-contrib-less": "1.4.0",
+    "grunt-contrib-uglify": "2.1.0",
+    "grunt-contrib-watch": "1.0.0 ",
+    "grunt-conventional-changelog": "6.1.0",
+    "grunt-html2js": "0.3.8",
+    "grunt-karma": "2.0.0",
+    "grunt-ng-annotate": "3.0.0",
+    "karma": "1.5.0",
+    "karma-coffee-preprocessor": "1.0.1",
+    "karma-chrome-launcher": "2.0.0",
+    "karma-jasmine": "1.1.0",
+    "jasmine-core" : "2.5.2"
+  }
+}
